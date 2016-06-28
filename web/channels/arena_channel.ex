@@ -11,8 +11,8 @@ defmodule Countdown.ArenaChannel do
     {status, val} = Counter.count
     broadcast! socket, "update",  %{counter: val}
     case status do
-      :ok -> {:reply, {:ok, %{won: false, counter: Counter.value}}, socket}
-      :overflow -> {:reply, {:ok, %{won: true, counter: Counter.value}}, socket}
+      :ok -> {:reply, {:ok, %{won: false, counter: val}}, socket}
+      :overflow -> {:reply, {:ok, %{won: true, counter: val}}, socket}
     end
   end
 end
