@@ -8,13 +8,11 @@ defmodule Countdown.ArenaChannel do
   end
 
   def handle_in("count", _message, socket) do
-    case Counter.count do
-      {:ok, val} -> broadcast! socket, "update",  %{counter: val}
-      _ -> broadcast! socket, "update",  %{counter: Counter.value}
-    end
-    case Counter.value do
-      0 -> {:reply, {:ok, %{won: true, counter: Counter.value}}, socket}
-      _ -> {:reply, {:ok, %{won: false, counter: Counter.value}}, socket}
+    {status, val} = Counter.count
+    broadcast! socket, "update",  %{counter: val}
+    case status do
+      :ok -> {:reply, {:ok, %{won: false, counter: Counter.value}}, socket}
+      :overflow -> {:reply, {:ok, %{won: true, counter: Counter.value}}, socket}
     end
   end
 end
